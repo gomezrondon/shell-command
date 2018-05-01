@@ -1,0 +1,13 @@
+--1--
+cd /d
+ls
+--2--
+cd /c/Users/Public
+ls
+--3--
+cd ${pw}
+gradle build
+--4--
+cd /d/CA/Test/shell-command/build/libs
+java -jar shell-command.jar
+--5--

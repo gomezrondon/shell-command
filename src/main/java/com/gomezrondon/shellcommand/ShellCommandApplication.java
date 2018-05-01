@@ -1,6 +1,7 @@
 package com.gomezrondon.shellcommand;
 
 
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @SpringBootApplication
 public class ShellCommandApplication {
@@ -43,19 +45,15 @@ class shellCommand{
 		commandService.getCommandOptions().forEach(System.out::println);
 	}
 
-	@ShellMethod("Input number Option")
+	@ShellMethod(value="Input number Option", key = "co")
 	public void command(String numberOption) {
 		this.commandService.selectCommandOption(numberOption);
 	}
 }
 
 @Service
-class CommandService implements CommandLineRunner {
+class CommandService {
 
-	@Override
-	public void run(String... args) throws Exception {
-		Files.lines(Paths.get("C:\\temp\\commands.txt")).
-	}
 
 	private final Map<String, String> commands = new HashMap<>();
 
@@ -97,88 +95,24 @@ class CommandService implements CommandLineRunner {
 
 		ProcessBuilder builder = new ProcessBuilder();
 		String command="";
-		switch ( numerOption){
 
-			case "1":
-				selectCommandOption("2");
-				selectCommandOption("4");
-				break;
-			case "1.1":
-				selectCommandOption("3");
-				selectCommandOption("2");
-				selectCommandOption("4");
-				break;
-			case "1.2":
-				selectCommandOption("3");
-				selectCommandOption("2");
-				break;
-			case "2":
-				command = Util.cd(PW);
-				command = Util.CommandAndCommand(command,"docker-compose up -d");
-				break;
-			case "2.1":
-				command = Util.cd(PW);
-				command = Util.CommandAndCommand(command,"git apply /c/CA/Patchs/docker_db_es_sll_1.patch");
-				command = Util.CommandAndCommand(command,"git apply /c/CA/Patchs/docker_db_es_sll_2.patch");
-				break;
-			case "99":
-				command = Util.cd(PW);
-				Path path = Paths.get("/c/CA", "Patchs/docker_db_es_sll_1.patch");
+		LoadingService lservice = new LoadingService();
+		command =lservice.getOption(Integer.valueOf(numerOption),"D:\\CA\\tempo\\commands.txt");
+		System.out.println("java: "+command);
 
-				break;
-			case "2.2":
-				command = Util.cd(PW);
-				command = Util.CommandAndCommand(command,"git apply -R /c/CA/Patchs/docker_db_es_sll_1.patch");
-				command = Util.CommandAndCommand(command,"git apply -R /c/CA/Patchs/docker_db_es_sll_2.patch");
-				break;
-			case "3":
-				command = Util.cd(PW);
-				command = Util.CommandAndCommand(command,"docker-compose down");
-				break;
 
-			case "4":
-				command = getCommand4();
-				builder.command("sh", "-c",command);
-				break;
-			case "5":
-				command = Util.cd(PW);
-				command = Util.CommandAndCommand(command,"gradle clean server:bootRun");
-
-				break;
-			case "6.1":
-				command = Util.cd(PW);
-				command = Util.CommandAndCommand(command,"git -c core.quotepath=false -c log.showSignature=false fetch origin --progress --prune");
-
-				break;
-			default:
-
-		}
 
 		builder.command("sh", "-c",command);
-		System.out.println(command);
 
 		try {
 			Process start = builder.start();
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(start.getInputStream()));
-//			System.out.println(" >>>>>>>>>> sh11");
 			stdInput.lines().forEach(System.out::println);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 
-
-
 	}
-
-	private String getCommand4() {
-		String command;
-		command = Util.cd(PW+"/db-migration");
-		command = Util.CommandAndCommand(command,"gradle doMigration > "+TEMP+"/salida_migration.txt ");
-		command = Util.CommandAndCommand(command,Util.cd(TEMP));
-		command = Util.CommandAndCommand(command,"kotlinc -script validaMigrationv2.kts");
-		return command;
-	}
-
 
 }
