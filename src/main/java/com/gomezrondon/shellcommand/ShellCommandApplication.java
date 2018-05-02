@@ -1,9 +1,6 @@
 package com.gomezrondon.shellcommand;
 
-
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.shell.standard.ShellComponent;
@@ -13,9 +10,6 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,11 +91,9 @@ class CommandService {
 		String command="";
 
 		LoadingService lservice = new LoadingService();
-		command =lservice.getOption(Integer.valueOf(numerOption),"D:\\CA\\tempo\\commands.txt");
+		command =lservice.getOption(Integer.valueOf(numerOption),"C:\\temp\\commands.txt");
 		System.out.println("java: "+command);
-
-
-
+/*
 		builder.command("sh", "-c",command);
 
 		try {
@@ -111,7 +103,7 @@ class CommandService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+*/
 
 	}
 
