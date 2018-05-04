@@ -29,14 +29,15 @@ class LoadingService {
 
     fun getLoadScripts(): Map<String, String>{
         val sub = StringSubstitutor(values)
-        val str = sub.replace(File(filePath).readLines().joinToString("\n"))
+        var str = sub.replace(File(filePath).readLines().joinToString("\n"))
         var map = mutableMapOf<String, String>()
 
         //get the menu numbers
         val regex ="""--(Menu|([\d.]+))--""".toRegex(RegexOption.MULTILINE)
         val regex2 ="""(Menu|([\d.]+))""".toRegex(RegexOption.MULTILINE)
         val menuNumbers = regex.findAll(str).map { regex2.find(it.value)}.map { it?.value }.toList()
-//        println(menuNumbers.toString())
+
+      //  findExecPlaceHolders(str)
 
         //get the menu items
         val separate1 = str.split(regex).filter { it.isNotEmpty() }
@@ -52,6 +53,29 @@ class LoadingService {
         return map
     }
 
+
+    fun findExecPlaceHolders(str:String):MutableMap<String, String>{
+        var execMap = mutableMapOf<String, String>()
+
+        val regexExec ="""exec\s([\d.|,]+)""".toRegex(RegexOption.MULTILINE)
+        val regexExec2 ="""([\d.|,]+)""".toRegex(RegexOption.MULTILINE)
+        val execList = regexExec.findAll(str).map { it.value }.toList()
+
+        //      execList.forEach { str = str.replace(it.toString(),"hola mundo!!") }
+
+        val execNumers = regexExec.findAll(str).map { regexExec2.find(it.value)}.map { it!!.value }.toList()
+
+        println(execNumers.toString())
+
+        var count = 0
+        execList.forEach {
+            execMap.add(it,execNumers[count])
+            count++
+        }
+
+
+        return execMap
+    }
 
     fun replaceCode(commandMap: MutableMap<String, String>){
 
