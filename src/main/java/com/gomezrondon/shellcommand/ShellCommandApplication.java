@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 
 
 @SpringBootApplication
@@ -31,8 +32,8 @@ class shellCommand{
 	}
 
 	@ShellMethod(value="Input number Option", key = "co")
-	public void command(String numberOption) {
-		this.commandService.selectCommandOption(numberOption);
+	public void command(String numberOption,@ShellOption(defaultValue="") String branch) {
+		this.commandService.selectCommandOption(numberOption,branch);
 	}
 }
 

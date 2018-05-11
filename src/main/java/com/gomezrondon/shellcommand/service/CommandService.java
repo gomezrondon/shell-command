@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -25,10 +26,14 @@ public class CommandService {
         return commands.get("Menu");
     }
 
-    public void selectCommandOption(String numerOption){
-        String command = commands.get(numerOption);
-        System.out.println(command);
-        executeCommand(command);
+    public void selectCommandOption(String numberOption, String branch){
+        String command = commands.get(numberOption);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("branch",branch);
+        String updCommand = lservice.replaceCode(map, command);
+        System.out.println(updCommand);
+        executeCommand(updCommand);
     }
 
     private void executeCommand(String command) {
@@ -41,6 +46,7 @@ public class CommandService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(">>>>>>>> end ");
     }
 
 }
