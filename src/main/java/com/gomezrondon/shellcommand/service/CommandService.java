@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.SequenceInputStream;
 import java.util.HashMap;
 import java.util.Map;
+
 
 @Service
 public class CommandService {
@@ -41,8 +43,12 @@ public class CommandService {
         builder.command("sh", "-c",command);
         try {
             Process start = builder.start();
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(start.getInputStream()));
+
+      //      Stream<InputStream> inputStream = Stream.of(start.getInputStream(), start.getErrorStream());
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(new SequenceInputStream(start.getInputStream(),start.getErrorStream())));
             stdInput.lines().forEach(System.out::println);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
